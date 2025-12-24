@@ -1,73 +1,79 @@
-# React + TypeScript + Vite
+# SCSS Project starter kit
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Стартовый шаблон для лендингов на React 19 + TypeScript + Vite с готовой
+SCSS-архитектурой: нормализация, базовые переменные, миксины, утилити-классы и
+подключение шрифтов.
 
-Currently, two official plugins are available:
+## Быстрый старт
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Требования: Node.js ≥ 18, любой пакетный менеджер (в репозитории есть
+  `yarn.lock`).
+- Установка зависимостей: `yarn install` (или `npm install`/`pnpm install`).
+- Локальная разработка: `yarn dev` и открыть адрес из консоли (обычно
+  http://localhost:5173).
+- Продакшн-сборка: `yarn build` (артефакты в `dist/`), предпросмотр сборки —
+  `yarn preview`.
 
-## React Compiler
+## Скрипты
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- `yarn dev` — запуск Vite в режиме разработки с HMR.
+- `yarn build` — сборка TypeScript-проекта и бандл Vite.
+- `yarn lint` — ESLint (flat-config, базовые правила JS/TS + React
+  Hooks/Refresh).
+- `yarn preview` — локальный сервер для проверки содержимого `dist/`.
 
-## Expanding the ESLint configuration
+## Структура проекта
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- `index.html` — точка входа Vite.
+- `src/main.tsx` — монтирование приложения в `#root`, подключение
+  `src/styles/main.scss`.
+- `src/App.tsx` — корневой компонент (пока пустой, добавляйте разметку
+  лендинга).
+- `src/styles/main.scss` — единая точка входа для стилей (подключает базовые
+  модули).
+- `src/styles/_normalize.scss` — нормализация и сбросы.
+- `src/styles/_globals.scss` — типографика, базовые стили текста и ссылок.
+- `src/styles/_fonts.scss` — подключение `Space Grotesk` через `@font-face`.
+- `src/styles/_variables.scss` — CSS-переменные (цвета, радиусы, размеры
+  контейнера и др.).
+- `src/styles/_mixins.scss` — утилиты (`fluid-text`, reset для ссылок/кнопок,
+  flex/abs-center, квадрат).
+- `src/styles/_media.scss` — брейкпоинты (desktop/tablet/mobile) и mixin
+  `hover`.
+- `src/styles/_utils.scss` — готовые классы: `.container`, `.visually-hidden`,
+  `.hidden-mobile`, `.visible-mobile`.
+- `public/` — ассеты, автоматически копируются в сборку (положите шрифты в
+  `public/fonts/`).
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Стек и конфигурация
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- Vite 7 (rolldown) + `@vitejs/plugin-react`.
+- React 19 с современным API `react-dom/client`.
+- TypeScript 5.9, строгая конфигурация в `tsconfig.app.json`.
+- ESLint в формате flat-config (`eslint.config.js`), глобальный игнор `dist/`.
+- PostCSS настроен через `postcss.config.cjs` с `postcss-pxtorem` (перевод `px`
+  → `rem`).
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Работа со стилями
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- Все базовые стили подключены из `src/styles/main.scss`; добавляйте свои модули
+  через `@use`.
+- Цвета, размеры и прочие токены редактируются в `src/styles/_variables.scss`
+  (используются CSS custom properties).
+- Для резиновой верстки есть миксин `fluid-text($max, $min)`, для адаптива —
+  миксины из `_media.scss`.
+- Утилиты контейнера и скрытия элементов уже готовы; дополняйте их в
+  `_utils.scss`.
+- При добавлении шрифтов замените пути в `src/styles/_fonts.scss` или добавьте
+  новые `@font-face`; файлы положите в `public/fonts`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Разработка и сборка
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- Хотрелоад работает из коробки, добавляйте страницы/секции в `src/App.tsx`.
+- Готовая сборка попадает в `dist/`; для деплоя достаточно раздавать содержимое
+  каталога статикой или через CDN.
+
+## Примечание
+
+- В проекте нет моков данных — структура максимально чистая для быстрого старта
+  проекта.
